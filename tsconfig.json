@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+
+    "module": "commonjs",
+
+    "outDir": "compiled",
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+
+    "skipLibCheck": true
+  },
+  "typeRoots": ["./node_modules/@types"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "compiled", "dist"]
+}
