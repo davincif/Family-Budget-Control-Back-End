@@ -2,12 +2,14 @@
   "compilerOptions": {
     "target": "es2016",
 
-    "module": "commonjs",
+    "module": "ES6",
 
     "outDir": "compiled",
 
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node16",
+    "sourceMap": true,
 
     "strict": true,
     "noImplicitAny": true,

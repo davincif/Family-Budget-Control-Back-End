@@ -10,7 +10,13 @@ const compiledDir = "compiled";
 const startFile = "main.js";
 
 function typscriptTranspile() {
-  execSync(`npx tsc`);
+  try {
+    execSync(`npx tsc`);
+    console.log("compilation done");
+  } catch (error) {
+    console.error(error.message);
+    console.error("failed", error.stdout.toString());
+  }
 }
 
 gulp.task("watchmon", (cb) => {
