@@ -5,7 +5,7 @@ import cors, { CorsOptions } from "cors";
 
 import { UserPort } from "./ports/http/userPort.js";
 import { HttpInterface } from "./ports/http/httpInterface.js";
-import { HTTPVerbs } from "./objects/libraries/httpVerbs.js";
+import { HTTPVerbs } from "./objects/libraries/http/httpVerbs.js";
 
 // manual initializaitons
 const app = express();

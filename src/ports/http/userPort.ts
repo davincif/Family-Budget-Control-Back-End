@@ -1,4 +1,4 @@
-import { ApiResourceConfigure } from "../../libraries/apiConfigure.js";
+import { ApiResourceConfigure } from "../../libraries/http/apiConfigure.js";
 import { HttpInterface } from "./httpInterface.js";
 
 export class UserPort implements HttpInterface {

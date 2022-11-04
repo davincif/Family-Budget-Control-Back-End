@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start-watch": "gulp",
-    "compile": "npx tsc",
     "start": "npx tsc && node compiled/main.js",
+    "watch": "gulp",
+    "compile": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "davincif",

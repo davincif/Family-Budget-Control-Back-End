@@ -1,9 +1,9 @@
 import {
   MiddlewareFunc,
   RoutesConfig,
-} from "../objects/libraries/apiConfigure.js";
-import { HTTPVerbs } from "../objects/libraries/httpVerbs.js";
-import { valuesIterator } from "./utils/enumUtilities.js";
+} from "../../objects/libraries/http/apiConfigure.js";
+import { HTTPVerbs } from "../../objects/libraries/http/httpVerbs.js";
+import { valuesIterator } from "../utils/enumUtilities.js";
 
 export class ApiResourceConfigure {
   /**
