@@ -1,6 +1,7 @@
 import { DatabaseInterface } from "../../adaptors/database/databaseInterface.js";
+import { DateUtils } from "../../libraries/utils/dateUtils.js";
 import { UserPartialCore } from "../../objects/core/userCore.js";
-import { UserTrans } from "../../objects/transitional/userTrans.js";
+import { UserPartialTrans } from "../../objects/transitional/userTrans.js";
 import { CoreAbstract } from "./coreAbstract.js";
 import { UsersCoreInterface } from "./usersCoreInterface.js";
 
@@ -15,13 +16,13 @@ export class UsersCore extends CoreAbstract implements UsersCoreInterface {
     this.database = database;
   }
 
-  public async craeteNew(user: UserTrans) {
+  public async craeteNew(user: UserPartialTrans) {
     // Data consistency garateeing
-    this.hasProperty(user, "name", {
+    this.hasNonNullProperty(user, "name", {
       msg: "missing name property on user",
       identifier: "C1M1E1",
     });
-    this.hasProperty(user, "birth", {
+    this.hasNonNullProperty(user, "birth", {
       msg: "missing birth property on user",
       identifier: "C1M1E2",
     });
@@ -29,21 +30,28 @@ export class UsersCore extends CoreAbstract implements UsersCoreInterface {
     // "transfer to core" object translation
     let partialUser: UserPartialCore = {
       name: user.name,
-      birth: user.birth,
+      birth: DateUtils.dateStringToDate(user.birth),
     };
 
     // core logic
     // check name validity
-    if (partialUser.name!.length <= 0) {
-      throw this.makeCoreError("user name is too short", "C1M1E2");
+    if (!DateUtils.isValidDate(partialUser.birth!)) {
+      throw this.makeCoreError("user date isn't valid", "C1M1E1");
+    }
+    if (DateUtils.isInTheFuture(partialUser.birth!)) {
+      throw this.makeCoreError("user was born in the future .-.", "C1M1E2");
     }
 
     // "core to transfer" object translation
+    let userPartialTransfer: UserPartialTrans = {
+      name: user.name,
+      birth: user.birth,
+    };
 
     // out login
-    // this.database.saveUser();
+    let savedUser = this.database.saveUser(userPartialTransfer);
 
     // always return transfer object
-    return user;
+    return savedUser;
   }
 }

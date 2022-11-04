@@ -1,4 +1,4 @@
-import { UserTrans } from "../../objects/transitional/userTrans.js";
+import { UserPartialTrans, UserTrans } from "../../objects/transitional/userTrans.js";
 
 export interface UsersCoreInterface {
   /**
@@ -6,5 +6,5 @@ export interface UsersCoreInterface {
    * @param user basic information of the user to be created
    * @returns The user created and saved on the DB
    */
-  craeteNew: (user: UserTrans) => Promise<UserTrans>;
+  craeteNew: (user: UserPartialTrans) => Promise<UserTrans>;
 }

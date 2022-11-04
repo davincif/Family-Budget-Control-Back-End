@@ -6,7 +6,7 @@ export abstract class CoreAbstract {
    * if it doesn't
    * @param obj which object to thest
    * @param propertyName which property to test in the object
-   * @param err The error msg and identifier to trhow in case of error
+   * @param err The error msg and identifier to trhow in case of error eg.: 0, ''
    * @returns undefined if success or a core error object in case of error
    */
   protected hasProperty(
@@ -15,6 +15,26 @@ export abstract class CoreAbstract {
     err: { msg: string; identifier: string }
   ): ErrorHandlingCore | undefined {
     if (obj[propertyName] !== undefined && obj[propertyName] !== null) {
+      return;
+    }
+
+    return this.makeCoreError(err.msg, err.identifier);
+  }
+
+  /**
+   * Check if the given property exists and it does not evaluates as undefined
+   * in the given object. And throws an error if the check fail
+   * @param obj which object to thest
+   * @param propertyName which property to test in the object
+   * @param err The error msg and identifier to trhow in case of error eg.: 0, ''
+   * @returns undefined if success or a core error object in case of error
+   */
+  protected hasNonNullProperty(
+    obj: any,
+    propertyName: string,
+    err: { msg: string; identifier: string }
+  ): ErrorHandlingCore | undefined {
+    if (!obj[propertyName]) {
       return;
     }
 

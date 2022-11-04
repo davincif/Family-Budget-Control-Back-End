@@ -1,8 +1,17 @@
-export type UserTrans = {
+export type UserPartialTrans = {
   id?: number;
   name: string;
-  birth: Date;
-  creation?: Date;
-  lastEdition?: Date;
+  birth: string;
+  creation?: string;
+  lastEdition?: string;
   active?: boolean;
+};
+
+export type UserTrans = {
+  id: number;
+  name: string;
+  birth: string;
+  creation: string;
+  lastEdition: string;
+  active: boolean;
 };

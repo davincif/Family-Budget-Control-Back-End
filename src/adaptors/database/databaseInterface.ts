@@ -1,6 +1,5 @@
 import { ConnectionDB } from "../../objects/out/database/connectionDB.js";
-import { UserDbObj } from "../../objects/out/database/userDB.js";
-import { UserTrans } from "../../objects/transitional/userTrans.js";
+import { UserPartialTrans, UserTrans } from "../../objects/transitional/userTrans.js";
 
 export interface DatabaseInterface {
   /**
@@ -14,5 +13,5 @@ export interface DatabaseInterface {
    * @param user The user to be saved
    * @returns The saved user
    */
-  saveUser: (user: UserTrans) => Promise<UserDbObj>;
+  saveUser: (user: UserPartialTrans) => Promise<UserTrans>;
 }
