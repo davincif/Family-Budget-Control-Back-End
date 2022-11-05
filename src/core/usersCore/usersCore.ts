@@ -8,8 +8,6 @@ import { UsersCoreInterface } from "./usersCoreInterface.js";
 import { ErrorHandlingCore } from "../../libraries/errorHandling/errorHandlingCore.js";
 
 export class UsersCore extends CoreAbstract implements UsersCoreInterface {
-  // TODO: REMEMBER TO REMOVE THIS IGNORE AT THE OPORTUNE TIME
-  // @ts-ignore
   private database: DatabaseInterface;
 
   constructor(database: DatabaseInterface) {
