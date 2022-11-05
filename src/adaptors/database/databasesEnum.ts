@@ -1,3 +1,3 @@
 export enum DatabasesEnum {
-  PLAIN_TEXT
+  PLAIN_TEXT = 1,
 }

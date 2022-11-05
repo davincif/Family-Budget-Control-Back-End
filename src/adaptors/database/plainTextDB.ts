@@ -1,4 +1,4 @@
-import { openSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 
 import { ConnectionDB } from "../../objects/out/database/connectionDB.js";
 import { UserDbObj } from "../../objects/out/database/userDB.js";
@@ -11,11 +11,6 @@ import { ErrorHandlingDB } from "../../libraries/errorHandling/errorHandlingDB.j
 import { DatabasesErrosEnum } from "../../libraries/errorHandling/databasesErrosEnum.js";
 
 export class PlainTextDB implements DatabaseInterface {
-  /**
-   * Database file openeded
-   */
-  private dbfile?: number;
-
   /**
    * The database file path. eg.: ./xablau/file.json
    */
@@ -32,10 +27,13 @@ export class PlainTextDB implements DatabaseInterface {
 
   public async connect(config: ConnectionDB): Promise<void> {
     this.dbFilePath = `${config.address}/${config.databaseName}.json`;
-    this.dbfile = openSync(this.dbFilePath, "r+");
+    const fileExists = existsSync(this.dbFilePath);
 
-    const readFile = readFileSync(this.dbfile, { encoding: "utf8", flag: "r" });
-    if (readFile) {
+    if (fileExists) {
+      const readFile = readFileSync(this.dbFilePath, {
+        encoding: "utf8",
+        flag: "r",
+      });
       this.memDB = JSON.parse(readFile);
     } else {
       // init db
