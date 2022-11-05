@@ -12,6 +12,6 @@ export type UserTrans = {
   name: string;
   birth: string;
   creation: string;
-  lastEdition: string;
+  lastEdition?: string;
   active: boolean;
 };

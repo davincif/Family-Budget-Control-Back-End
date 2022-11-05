@@ -1,6 +1,6 @@
 export enum ErrorHandlingTypesEnum {
   CORE = 1,
-  JSON_DB,
+  DATABASE,
   EXPRESS,
   ERROR_HANDLING,
 }

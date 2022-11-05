@@ -2,8 +2,10 @@ import { DatabaseInterface } from "../../adaptors/database/databaseInterface.js"
 import { DateUtils } from "../../libraries/utils/dateUtils.js";
 import { UserPartialCore } from "../../objects/core/userCore.js";
 import { UserPartialTrans } from "../../objects/transitional/userTrans.js";
-import { CoreAbstract } from "./coreAbstract.js";
+import { CoreAbstract } from "../coreAbstract.js";
+import { CoreErrosEnum } from "../../libraries/errorHandling/coreErrosEnum.js";
 import { UsersCoreInterface } from "./usersCoreInterface.js";
+import { ErrorHandlingCore } from "../../libraries/errorHandling/errorHandlingCore.js";
 
 export class UsersCore extends CoreAbstract implements UsersCoreInterface {
   // TODO: REMEMBER TO REMOVE THIS IGNORE AT THE OPORTUNE TIME
@@ -19,10 +21,12 @@ export class UsersCore extends CoreAbstract implements UsersCoreInterface {
   public async craeteNew(user: UserPartialTrans) {
     // Data consistency garateeing
     this.hasNonNullProperty(user, "name", {
+      errorcode: CoreErrosEnum.BAD_ARGUMENT,
       msg: "missing name property on user",
       identifier: "C1M1E1",
     });
     this.hasNonNullProperty(user, "birth", {
+      errorcode: CoreErrosEnum.BAD_ARGUMENT,
       msg: "missing birth property on user",
       identifier: "C1M1E2",
     });
@@ -36,10 +40,14 @@ export class UsersCore extends CoreAbstract implements UsersCoreInterface {
     // core logic
     // check name validity
     if (!DateUtils.isValidDate(partialUser.birth!)) {
-      throw this.makeCoreError("user date isn't valid", "C1M1E1");
+      throw new ErrorHandlingCore(CoreErrosEnum.INVALID_ARGUMENT)
+        .setIdentifier("user date isn't valid")
+        .setMsg("C1M1E1");
     }
     if (DateUtils.isInTheFuture(partialUser.birth!)) {
-      throw this.makeCoreError("user was born in the future .-.", "C1M1E2");
+      throw new ErrorHandlingCore(CoreErrosEnum.INVALID_ARGUMENT)
+        .setIdentifier("user was born in the future .-.")
+        .setMsg("C1M1E2");
     }
 
     // "core to transfer" object translation
@@ -49,7 +57,7 @@ export class UsersCore extends CoreAbstract implements UsersCoreInterface {
     };
 
     // out login
-    let savedUser = this.database.saveUser(userPartialTransfer);
+    let savedUser = await this.database.saveUser(userPartialTransfer);
 
     // always return transfer object
     return savedUser;

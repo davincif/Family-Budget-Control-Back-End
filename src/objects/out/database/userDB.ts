@@ -1,8 +1,8 @@
 export type UserDbObj = {
   id: number;
   name: string;
-  birth: Date;
-  creation: Date;
-  lastEdition: Date;
+  birth: string;
+  creation: string;
+  lastEdition?: string;
   active: boolean;
 };

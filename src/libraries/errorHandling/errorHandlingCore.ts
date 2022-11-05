@@ -2,8 +2,8 @@ import { ErrorHandlingAbstract } from "./errorHandlingAbstract.js";
 import { ErrorHandlingTypesEnum } from "./errorHandlingTypesEnum.js";
 
 export class ErrorHandlingCore extends ErrorHandlingAbstract<never> {
-  constructor() {
-    super();
+  constructor(errorCode: any) {
+    super(errorCode);
 
     this.setOrigin(ErrorHandlingTypesEnum.CORE);
   }

@@ -1,4 +1,5 @@
-import { ErrorHandlingCore } from "../../libraries/errorHandling/errorHandlingCore.js";
+import { ErrorHandlingCore } from "../libraries/errorHandling/errorHandlingCore.js";
+import { CoreErrosEnum } from "../libraries/errorHandling/coreErrosEnum.js";
 
 export abstract class CoreAbstract {
   /**
@@ -12,13 +13,15 @@ export abstract class CoreAbstract {
   protected hasProperty(
     obj: any,
     propertyName: string,
-    err: { msg: string; identifier: string }
+    err: { errorcode: CoreErrosEnum; msg: string; identifier: string }
   ): ErrorHandlingCore | undefined {
     if (obj[propertyName] !== undefined && obj[propertyName] !== null) {
       return;
     }
 
-    return this.makeCoreError(err.msg, err.identifier);
+    return new ErrorHandlingCore(err.errorcode)
+      .setIdentifier(err.identifier)
+      .setMsg(err.msg);
   }
 
   /**
@@ -32,22 +35,31 @@ export abstract class CoreAbstract {
   protected hasNonNullProperty(
     obj: any,
     propertyName: string,
-    err: { msg: string; identifier: string }
+    err: { errorcode: CoreErrosEnum; msg: string; identifier: string }
   ): ErrorHandlingCore | undefined {
     if (!obj[propertyName]) {
       return;
     }
 
-    return this.makeCoreError(err.msg, err.identifier);
+    return new ErrorHandlingCore(err.errorcode)
+      .setIdentifier(err.identifier)
+      .setMsg(err.msg);
   }
 
-  /**
-   * Builds a core error object with the requested information
-   * @param msg the msg to be addded to the error object
-   * @param identifier the identifier of the error object to be created
-   * @returns A core error object in case of error
-   */
-  protected makeCoreError(msg: string, identifier: string) {
-    return new ErrorHandlingCore().setIdentifier(identifier).setMsg(msg);
-  }
+  // /**
+  //  * Builds a core error object with the requested information
+  //  * @param errorcode the unique code that describe this error for other layers
+  //  * @param msg the msg to be addded to the error object
+  //  * @param identifier the identifier of the error object to be created
+  //  * @returns A core error object in case of error
+  //  */
+  // protected makeCoreError(
+  //   errorcode: CoreErrosEnum,
+  //   msg: string,
+  //   identifier: string
+  // ) {
+  //   return new ErrorHandlingCore(errorcode)
+  //     .setIdentifier(identifier)
+  //     .setMsg(msg);
+  // }
 }

@@ -8,6 +8,14 @@ import { ErrorHandlingTypesEnum } from "./errorHandlingTypesEnum.js";
  */
 export abstract class ErrorHandlingAbstract<T> {
   /**
+   * A errorCode (for internal use only, this field IS NOT serialized). Helps in
+   * the error treatment between layers.
+   *
+   * PS.: It's sopposed to be an enum.
+   */
+  protected errorCode: any;
+
+  /**
    * A identifier to the error: preferencially an unique one!
    */
   protected identifier: string = "";
@@ -31,9 +39,18 @@ export abstract class ErrorHandlingAbstract<T> {
   protected error?: T;
   private wasErrorSet = false;
 
-  constructor() {}
+  constructor(errorCode: any) {
+    this.errorCode = errorCode;
+  }
 
   protected abstract serializeError(): unknown;
+
+  /**
+   * Get the errorCode
+   */
+  public getErrorCode() {
+    return this.errorCode;
+  }
 
   /**
    * Get the ─ preferencially unique ─ identifier of the error
