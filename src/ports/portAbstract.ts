@@ -1,8 +1,7 @@
 import { DatabaseInterface } from "../adaptors/database/databaseInterface.js";
-import { CoreAbstract } from "../core/coreAbstract.js";
 
-export abstract class PortAbstract {
-  protected core: CoreAbstract;
+export abstract class PortAbstract<T> {
+  protected core: T;
   protected database?: DatabaseInterface;
 
   /**
@@ -10,7 +9,7 @@ export abstract class PortAbstract {
    */
   private inited = false;
 
-  constructor(core: CoreAbstract, database: DatabaseInterface) {
+  constructor(core: T, database: DatabaseInterface) {
     this.core = core;
     this.database = database;
   }

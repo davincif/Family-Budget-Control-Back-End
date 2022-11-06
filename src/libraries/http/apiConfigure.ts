@@ -25,7 +25,7 @@ export class ApiResourceConfigure {
   constructor(resource: string = "") {
     // setting resource garating '/' at the end
     this.resource =
-      resource[resource.length - 1] === "/" ? resource : `${resource}/`;
+      resource[0] === "/" ? resource : `/${resource}`;
 
     // setting up HTTP Methods list of routes
     for (let method of valuesIterator(HTTPVerbs)) {
@@ -63,7 +63,7 @@ export class ApiResourceConfigure {
    * @param methodEnum Which Httb verb this route should have
    * @param route what is the route to be crated and it's callback function?
    */
-  public addRoute(methodEnum: number, route: RoutesConfig): void {
+  public addRoute(methodEnum: HTTPVerbs, route: RoutesConfig): void {
     const method = HTTPVerbs[methodEnum];
 
     this.routes[method].push({ ...route });
@@ -74,7 +74,7 @@ export class ApiResourceConfigure {
    * Configuration
    * @param methodEnum Which Httb verb this route should have
    */
-  public getRoutes(methodEnum: number): RoutesConfig[] {
+  public getRoutes(methodEnum: HTTPVerbs): RoutesConfig[] {
     const method = HTTPVerbs[methodEnum];
     const copiedRoutes = this.routes[method].map((route) => {
       return {
