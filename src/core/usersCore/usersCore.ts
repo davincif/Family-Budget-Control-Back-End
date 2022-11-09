@@ -39,13 +39,13 @@ export class UsersCore extends CoreAbstract implements UsersCoreInterface {
     // check name validity
     if (!DateUtils.isValidDate(partialUser.birth!)) {
       throw new ErrorHandlingCore(CoreErrosEnum.INVALID_ARGUMENT)
-        .setIdentifier("user date isn't valid")
-        .setMsg("C1M1E1");
+        .setIdentifier("C1M1E1")
+        .setMsg("user date isn't valid");
     }
     if (DateUtils.isInTheFuture(partialUser.birth!)) {
       throw new ErrorHandlingCore(CoreErrosEnum.INVALID_ARGUMENT)
-        .setIdentifier("user was born in the future .-.")
-        .setMsg("C1M1E2");
+        .setIdentifier("C1M1E2")
+        .setMsg("the user was born in the future .-.");
     }
 
     // "core to transfer" object translation

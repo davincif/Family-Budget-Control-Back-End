@@ -78,8 +78,8 @@ export class ApiResourceConfigure {
     const method = HTTPVerbs[methodEnum];
     const copiedRoutes = this.routes[method].map((route) => {
       return {
+        ...route,
         path: `${this.resource}${route.path}`,
-        call: route.call,
       };
     });
 

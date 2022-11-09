@@ -21,7 +21,7 @@ import { UsersCore } from "./core/usersCore/usersCore.js";
   app.get("/", function (_, res) {
     const answer = "Lock'n'load, sir! 🤖";
     res.status(200).send(answer);
-    console.info(answer);
+    console.log(answer);
   });
 
   const server = app.listen(process.env.PORT);
@@ -34,6 +34,7 @@ import { UsersCore } from "./core/usersCore/usersCore.js";
   function initializeManualMiddlewares(corsOptions: CorsOptions) {
     console.log("corsOptions", corsOptions);
     app.use(cors(corsOptions));
+    app.use(express.json());
   }
 
   async function moduleLoading() {

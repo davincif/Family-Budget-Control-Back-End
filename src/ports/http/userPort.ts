@@ -28,6 +28,32 @@ export class UserPort
   public async start([app]: [Express]) {
     this.config.addRoute(HTTPVerbs.POST, {
       path: "",
+      validation: {
+        schema: {
+          name: {
+            exists: {
+              errorMessage: "user name is missing",
+            },
+            notEmpty: {
+              errorMessage: "user name is empty",
+            },
+            isString: {
+              errorMessage: "user name must be a string",
+            },
+            trim: true,
+          },
+          birth: {
+            isISO8601: {
+              errorMessage: "birth must be a valid ISO8601 date",
+            },
+            exists: {
+              errorMessage: "birth date is missing",
+            },
+            trim: true,
+          },
+        },
+        defaultLocations: ["body"],
+      },
       call: this.createUser,
     });
 

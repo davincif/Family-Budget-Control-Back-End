@@ -6,14 +6,14 @@ import { ErrorHandlingTypesEnum } from "./errorHandlingTypesEnum.js";
  *
  * NOTE that: once set, the properties of this class is imutable!
  */
-export abstract class ErrorHandlingAbstract<T> {
+export abstract class ErrorHandlingAbstract<ERROR_ENUM, ERROR_OBJ> {
   /**
    * A errorCode (for internal use only, this field IS NOT serialized). Helps in
    * the error treatment between layers.
    *
    * PS.: It's sopposed to be an enum.
    */
-  protected errorCode: any;
+  protected errorCode: ERROR_ENUM;
 
   /**
    * A identifier to the error: preferencially an unique one!
@@ -36,14 +36,14 @@ export abstract class ErrorHandlingAbstract<T> {
   /**
    * Some other possible error object that may be generated
    */
-  protected error?: T;
+  protected error?: ERROR_OBJ;
   private wasErrorSet = false;
 
   constructor(errorCode: any) {
     this.errorCode = errorCode;
   }
 
-  protected abstract serializeError(): unknown;
+  protected abstract serializeError(): unknown | undefined;
 
   /**
    * Get the errorCode
@@ -145,7 +145,7 @@ export abstract class ErrorHandlingAbstract<T> {
    * @returns the object modificated if success or undefined otherwise
    * @throws if try to mudate an already mutated error
    */
-  public setError(error: T) {
+  public setError(error: ERROR_OBJ) {
     if (this.wasErrorSet) {
       throw "IMUTABLE ERROR CHANGE!";
     }
