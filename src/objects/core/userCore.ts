@@ -12,6 +12,6 @@ export type UserCore = {
   name: string;
   birth: Date;
   creation: Date;
-  lastEdition: Date;
+  lastEdition?: Date;
   active: boolean;
 };
