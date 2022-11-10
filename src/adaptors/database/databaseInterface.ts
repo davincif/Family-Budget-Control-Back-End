@@ -1,4 +1,5 @@
 import { ConnectionDB } from "../../objects/out/database/connectionDB.js";
+import { AuthenticationTrans } from "../../objects/transitional/authenticationTrans.js";
 import {
   UserPartialTrans,
   UserTrans,
@@ -19,9 +20,27 @@ export interface DatabaseInterface {
   saveUser: (user: UserPartialTrans) => Promise<UserTrans>;
 
   /**
-   * Saerches the user bu the given id
+   * Saerches the user by the given id
    * @param id The id of the user to be searched
-   * @returns The foudn user or undefined if not found
+   * @returns The found user or undefined if none was found
    */
-  getUserById: (id: number) => Promise<UserTrans|undefined>;
+  getUserById: (id: number) => Promise<UserTrans | undefined>;
+
+  /**
+   * Saerches the user by the given email
+   * @param email The email of the user to be searched
+   * @returns The found user or undefined if none was found
+   */
+  getUserByEmail: (email: string) => Promise<UserTrans | undefined>;
+
+  /**
+   * Saves the given autentication object and relate it with the given user
+   * @param id The id of the user to be authenticated
+   * @param auth Authentication Object
+   * @returns the saved authentication Object
+   */
+  saveAuthentication: (
+    id: number,
+    auth: AuthenticationTrans
+  ) => Promise<AuthenticationTrans>;
 }

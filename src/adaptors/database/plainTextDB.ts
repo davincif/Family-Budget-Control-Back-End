@@ -9,6 +9,8 @@ import {
 import { DatabaseInterface } from "./databaseInterface.js";
 import { ErrorHandlingDB } from "../../libraries/errorHandling/errorHandlingDB.js";
 import { DatabasesErrosEnum } from "../../libraries/errorHandling/databasesErrosEnum.js";
+import { AuthenticationTrans } from "../../objects/transitional/authenticationTrans.js";
+import { AuthenticationDB } from "../../objects/out/database/authenticationDB.js";
 
 export class PlainTextDB implements DatabaseInterface {
   /**
@@ -21,6 +23,7 @@ export class PlainTextDB implements DatabaseInterface {
    */
   private memDB!: {
     users: UserDbObj[];
+    logged: { [id: number]: AuthenticationDB };
   };
 
   constructor() {}
@@ -39,6 +42,7 @@ export class PlainTextDB implements DatabaseInterface {
       // init db
       this.memDB = {
         users: [],
+        logged: {},
       };
 
       this.saveDb();
@@ -52,12 +56,21 @@ export class PlainTextDB implements DatabaseInterface {
     let userToSave: UserDbObj = {
       id: this.memDB.users[this.memDB.users.length - 1]?.id || 0,
       name: user.name,
+      email: user.email,
+      password: user.password || "",
       birth: user.birth,
       creation: new Date().toISOString(),
       active: true,
     };
 
     // database logic: create and save on the database
+    const existentUser = await this.getUserByEmail(userToSave.email);
+    if (existentUser) {
+      throw new ErrorHandlingDB(DatabasesErrosEnum.USER_NOT_FOUND)
+        .setIdentifier("PT-M2E1")
+        .setMsg(`the email '${userToSave.email}' is already taken`);
+    }
+
     this.memDB.users.push(userToSave);
     this.saveDb();
 
@@ -65,6 +78,8 @@ export class PlainTextDB implements DatabaseInterface {
     let userSaved: UserTrans = {
       id: userToSave.id,
       name: userToSave.name,
+      email: userToSave.email,
+      password: userToSave.password,
       birth: userToSave.birth,
       creation: userToSave.creation,
       active: userToSave.active,
@@ -86,7 +101,53 @@ export class PlainTextDB implements DatabaseInterface {
     // "database to transitional" objects translation
     let foundUser: UserTrans = {
       id: found.id,
+      email: found.email,
       name: found.name,
+      password: found.password,
+      birth: found.birth,
+      creation: found.creation,
+      active: found.active,
+    };
+
+    return foundUser;
+  }
+
+  public async saveAuthentication(id: number, auth: AuthenticationTrans) {
+    this.garanteeConnected();
+
+    // database logic: create and save on the database
+    const existentUser = await this.getUserById(id);
+    if (!existentUser) {
+      throw new ErrorHandlingDB(DatabasesErrosEnum.USER_NOT_FOUND)
+        .setIdentifier("PT-M5E1")
+        .setMsg(`there's no user with id '${id}' at the database`);
+    }
+
+    // "transitional to database" object translation
+    let authDb: AuthenticationDB = { jwt: auth.jwt };
+
+    this.memDB.logged[id] = authDb;
+    this.saveDb();
+
+    return auth;
+  }
+
+  public async getUserByEmail(email: string) {
+    this.garanteeConnected();
+
+    // database logic: searching
+    let found = this.memDB.users.find((user) => user.email === email);
+
+    if (!found) {
+      return;
+    }
+
+    // "database to transitional" objects translation
+    let foundUser: UserTrans = {
+      id: found.id,
+      email: found.email,
+      name: found.name,
+      password: found.password,
       birth: found.birth,
       creation: found.creation,
       active: found.active,
@@ -111,7 +172,7 @@ export class PlainTextDB implements DatabaseInterface {
     }
 
     throw new ErrorHandlingDB(DatabasesErrosEnum.CONNECTION_FAILED)
-      .setIdentifier("PT1M1E1")
+      .setIdentifier("PT-M1E1")
       .setMsg("The json database was never connected/created");
   }
 }

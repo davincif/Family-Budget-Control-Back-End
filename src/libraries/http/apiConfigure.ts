@@ -23,9 +23,7 @@ export class ApiResourceConfigure {
   private middlewares: MiddlewareFunc[] = [];
 
   constructor(resource: string = "") {
-    // setting resource garating '/' at the end
-    this.resource =
-      resource[0] === "/" ? resource : `/${resource}`;
+    this.resource = resource;
 
     // setting up HTTP Methods list of routes
     for (let method of valuesIterator(HTTPVerbs)) {
